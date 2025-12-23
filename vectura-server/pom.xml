@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.vectura</groupId>
+    <artifactId>vectura-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>vectura-server</artifactId>
+  <dependencies>
+    <dependency>
+        <groupId>com.vectura</groupId>
+        <artifactId>vectura-core</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+</project>
