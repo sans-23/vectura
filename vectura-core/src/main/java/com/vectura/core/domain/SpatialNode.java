@@ -13,7 +13,7 @@ public class SpatialNode {
     private final String id;
     private final GeoCoordinate coordinate;
 
-    SpatialNode(String id, GeoCoordinate coordinate){
+    public SpatialNode(String id, GeoCoordinate coordinate){
         this.id = id;
         this.coordinate = coordinate;
     }
