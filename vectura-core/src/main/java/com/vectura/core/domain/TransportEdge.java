@@ -18,7 +18,7 @@ public class TransportEdge {
     private volatile boolean isOpen = true;
     private volatile double trafficCoef = 1.0;
 
-    TransportEdge(SpatialNode to, SpatialNode from){
+    public TransportEdge(SpatialNode from, SpatialNode to){
         this.to = to;
         this.from = from;
         this.distanceKm = to.coordinate().distanceTo(from.coordinate());
