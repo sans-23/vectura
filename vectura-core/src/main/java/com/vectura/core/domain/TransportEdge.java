@@ -11,4 +11,26 @@ package com.vectura.core.domain;
  * </p>
  */
 public class TransportEdge {
+    private final SpatialNode to;
+    private final SpatialNode from;
+    private final double distanceKm;
+
+    private volatile boolean isOpen = true;
+    private volatile double trafficCoef = 1.0;
+
+    TransportEdge(SpatialNode to, SpatialNode from){
+        this.to = to;
+        this.from = from;
+        this.distanceKm = to.coordinate().distanceTo(from.coordinate());
+    }
+
+    public double getCost(){
+        if(!isOpen) return Double.POSITIVE_INFINITY;
+        return distanceKm*trafficCoef;
+    }
+
+    // State Management
+    public void close() { this.isOpen = false; }
+    public void open() { this.isOpen = true; }
+    public boolean isOpen() { return isOpen; }
 }
