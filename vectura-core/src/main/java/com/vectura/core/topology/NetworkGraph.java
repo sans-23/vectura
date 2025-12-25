@@ -44,5 +44,9 @@ public class NetworkGraph {
     public int edgeCount() { 
         return adjList.values().stream().mapToInt(List::size).sum(); 
     }
+
+    public List<SpatialNode> getAllNodes(){
+        return new ArrayList<>(nodes.values());
+    }
     
 }

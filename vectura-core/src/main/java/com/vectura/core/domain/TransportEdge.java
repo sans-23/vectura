@@ -33,4 +33,12 @@ public class TransportEdge {
     public void close() { this.isOpen = false; }
     public void open() { this.isOpen = true; }
     public boolean isOpen() { return isOpen; }
+
+    public SpatialNode getTarget() {
+        return to;
+    }
+
+    public SpatialNode getSource() {
+        return from;
+    }
 }
