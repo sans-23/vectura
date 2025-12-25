@@ -13,5 +13,5 @@ import java.io.InputStream;
  * </p>
  */
 public interface GraphSource {
-    NetworkGraph load(InputStream stream);
+    public NetworkGraph load(InputStream stream);
 }
