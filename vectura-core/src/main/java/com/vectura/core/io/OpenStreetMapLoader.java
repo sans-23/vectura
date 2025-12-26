@@ -58,18 +58,26 @@ public class OpenStreetMapLoader implements GraphSource {
 
     private void processFeature(JsonNode feature, NetworkGraph graph) {
         JsonNode geometry = feature.get("geometry");
+        JsonNode oneway = feature.get("properties").get("oneway");
+        String surface = feature.get("properties").get("surface").asText();
+        boolean isOneWay = false;
+
         if (geometry == null)
             return;
+
+        if (oneway != null){
+            isOneWay = oneway.asText().equals("yes");
+        }
 
         String type = geometry.get("type").asText();
 
         // filter LineString to keep the data clean
         if ("LineString".equals(type)) {
-            processPath(geometry.get("coordinates"), graph);
+            processPath(geometry.get("coordinates"), graph, isOneWay, surface);
         }
     }
 
-    private void processPath(JsonNode coord, NetworkGraph graph) {
+    private void processPath(JsonNode coord, NetworkGraph graph, boolean isOneWay, String surface) {
         if (coord.size() < 2)
             return;
 
@@ -90,7 +98,7 @@ public class OpenStreetMapLoader implements GraphSource {
                 nodeId = nextId++;
                 coordinateIndex.put(geo, nodeId);
             }
-            
+
             SpatialNode node = new SpatialNode(nodeId, geo);
             pathNodes.add(node);
             graph.addNode(node);
@@ -99,8 +107,9 @@ public class OpenStreetMapLoader implements GraphSource {
         for (int i = 0; i < pathNodes.size() - 1; i++) {
             SpatialNode from = pathNodes.get(i);
             SpatialNode to = pathNodes.get(i + 1);
-            graph.addEdge(to, from);
-            graph.addEdge(from, to);
+            if(!isOneWay)
+                graph.addEdge(to, from, surface);
+            graph.addEdge(from, to, surface);
         }
     }
 }

@@ -14,13 +14,15 @@ public class TransportEdge {
     private final SpatialNode to;
     private final SpatialNode from;
     private final double distanceKm;
+    private final String surface;
 
     private volatile boolean isOpen = true;
     private volatile double trafficCoef = 1.0;
 
-    public TransportEdge(SpatialNode from, SpatialNode to){
+    public TransportEdge(SpatialNode from, SpatialNode to, String surface){
         this.to = to;
         this.from = from;
+        this.surface = surface;
         this.distanceKm = to.coordinate().distanceTo(from.coordinate());
     }
 
@@ -36,6 +38,10 @@ public class TransportEdge {
 
     public SpatialNode getTarget() {
         return to;
+    }
+
+    public String getSurface() {
+        return surface;
     }
 
     public SpatialNode getSource() {

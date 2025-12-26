@@ -25,11 +25,18 @@ public class NetworkGraph {
         adjList.putIfAbsent(node.id(), new ArrayList<>());
     }
 
+    public void addEdge(SpatialNode to, SpatialNode from, String surface) {
+        addNode(to);
+        addNode(from);
+
+        adjList.get(from.id()).add(new TransportEdge(from, to, surface));
+    }
+
     public void addEdge(SpatialNode to, SpatialNode from) {
         addNode(to);
         addNode(from);
 
-        adjList.get(from.id()).add(new TransportEdge(from, to));
+        adjList.get(from.id()).add(new TransportEdge(from, to, "paved"));
     }
 
     public List<TransportEdge> getOutboundEdges(long nodeId) {
