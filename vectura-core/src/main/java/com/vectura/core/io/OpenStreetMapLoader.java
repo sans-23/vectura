@@ -59,13 +59,14 @@ public class OpenStreetMapLoader implements GraphSource {
     private void processFeature(JsonNode feature, NetworkGraph graph) {
         JsonNode geometry = feature.get("geometry");
         JsonNode oneway = feature.get("properties").get("oneway");
-        String surface = feature.get("properties").get("surface").asText();
+        JsonNode surfaceNode = feature.get("properties").get("surface");
+        String surface = (surfaceNode != null) ? surfaceNode.asText() : "paved";
         boolean isOneWay = false;
 
         if (geometry == null)
             return;
 
-        if (oneway != null){
+        if (oneway != null) {
             isOneWay = oneway.asText().equals("yes");
         }
 
@@ -107,7 +108,7 @@ public class OpenStreetMapLoader implements GraphSource {
         for (int i = 0; i < pathNodes.size() - 1; i++) {
             SpatialNode from = pathNodes.get(i);
             SpatialNode to = pathNodes.get(i + 1);
-            if(!isOneWay)
+            if (!isOneWay)
                 graph.addEdge(to, from, surface);
             graph.addEdge(from, to, surface);
         }

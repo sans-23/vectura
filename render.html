@@ -45,12 +45,32 @@
 
         function renderRoute(geoJson) {
             const layer = L.geoJSON(geoJson, {
-                style: { color: '#ff0000', weight: 5 }
+                style: function(feature) {
+                    if (feature.geometry.type === "LineString") {
+                        return { color: '#4285F4', weight: 5 };
+                    }
+                },
+                pointToLayer: function (feature, latlng) {
+                    if (feature.properties.type === 'warehouse') {
+                        return L.circleMarker(latlng, {
+                            radius: 6,
+                            fillColor: "#EA4335",
+                            color: "#ccc",
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 1
+                        }).bindPopup(feature.properties.name);
+                    }
+                    return L.marker(latlng);
+                }
             }).addTo(map);
             map.fitBounds(layer.getBounds());
             
-            const dist = geoJson.features[0].properties.distance_km;
-            if(dist) document.getElementById('stats').innerHTML += `<br><b>Distance:</b> ${dist.toFixed(2)} km`;
+            // Safe access to distance, assuming the first feature is the route LineString
+            const routeFeature = geoJson.features.find(f => f.geometry.type === "LineString");
+            if(routeFeature && routeFeature.properties.distance_km) {
+                document.getElementById('stats').innerHTML += `<br><b>Distance:</b> ${routeFeature.properties.distance_km.toFixed(2)} km`;
+            }
         }
     </script>
 </body>

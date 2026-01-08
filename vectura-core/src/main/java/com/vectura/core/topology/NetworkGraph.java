@@ -20,19 +20,21 @@ public class NetworkGraph {
         adjList = new ConcurrentHashMap<>();
     }
 
-    public void snapNode(SpatialNode node){
+    public void snapNode(SpatialNode node) {
         // find nearest neigbour and link it with a edge
         SpatialNode neighbour = null;
         double min_dist = Double.POSITIVE_INFINITY;
-        for(SpatialNode n : nodes.values()){
+        for (SpatialNode n : nodes.values()) {
             double distance = node.coordinate().distanceTo(n.coordinate());
-            if(min_dist > distance){
+            if (min_dist > distance) {
                 min_dist = distance;
                 neighbour = n;
             }
         }
-        
+
+        // Add edges in both directions so we can route TO and FROM the new node
         addEdge(node, neighbour);
+        addEdge(neighbour, node);
     }
 
     public void addNode(SpatialNode node) {

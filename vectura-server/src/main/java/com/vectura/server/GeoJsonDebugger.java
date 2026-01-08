@@ -26,11 +26,11 @@ public class GeoJsonDebugger {
             String jsFilename = filename.replace(".json", "") + ".js";
             String jsonString = mapper.writeValueAsString(geoJson);
             String jsContent = "window.ROUTE_DATA = " + jsonString + ";";
-            
+
             try (FileWriter writer = new FileWriter(jsFilename)) {
                 writer.write(jsContent);
             }
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class GeoJsonDebugger {
 
         ObjectNode feature = features.addObject();
         feature.put("type", "Feature");
-        
+
         ObjectNode properties = feature.putObject("properties");
         properties.put("stroke", "#ff0000");
         properties.put("stroke-width", 4);
@@ -58,6 +58,28 @@ public class GeoJsonDebugger {
             point.add(node.coordinate().longitude());
             point.add(node.coordinate().latitude());
         }
+
+        // Add Start/End Markers
+        if (!route.path().isEmpty()) {
+            addPointFeature(features, route.path().get(0), "Warehouse A (Start)");
+            addPointFeature(features, route.path().get(route.path().size() - 1), "Warehouse B (End)");
+        }
+
         return root;
+    }
+
+    private static void addPointFeature(ArrayNode features, SpatialNode node, String name) {
+        ObjectNode feature = features.addObject();
+        feature.put("type", "Feature");
+
+        ObjectNode properties = feature.putObject("properties");
+        properties.put("name", name);
+        properties.put("type", "warehouse");
+
+        ObjectNode geometry = feature.putObject("geometry");
+        geometry.put("type", "Point");
+        ArrayNode coordinates = geometry.putArray("coordinates");
+        coordinates.add(node.coordinate().longitude());
+        coordinates.add(node.coordinate().latitude());
     }
 }
